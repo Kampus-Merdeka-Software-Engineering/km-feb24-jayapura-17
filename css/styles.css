@@ -224,7 +224,7 @@ footer a {
     overflow: hidden;
     white-space: nowrap;
     position: relative;
-    border: 2px solid #333; /* Add border */
+    border: 2px solid #fff; /* Add border */
     background-color: #fff; /* Add background color */
     padding: 20px; /* Add padding */
     border-radius: 10px; /* Add border radius */
@@ -242,7 +242,7 @@ footer a {
     margin-right: 10px;
     opacity: 0.7; /* Set initial opacity */
     transition: opacity 0.3s;
-    border: 2px solid #333; /* Add border */
+    border: 2px solid #fff; /* Add border */
     border-radius: 5px; /* Add border radius */
     box-sizing: content-box; /* Adjust box-sizing */
 }
@@ -323,7 +323,7 @@ footer a {
     font-size: 36px;
     cursor: pointer;
     z-index: 1;
-    background-color: #333; /* Background color for the border */
+    background-color: transparent; /* Background color for the border */
     border: 2px solid transparent; /* Add border */
     border-radius: 0%; /* Make the arrow circular */
     color: #fff;

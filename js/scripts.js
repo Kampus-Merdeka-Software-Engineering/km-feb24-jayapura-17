@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p>${memberUniversity}</p>
                     </div>
                     <span class="close-popup">&times;</span>
-                    <button class="next-pic">&gt;</button>
+                    
                 </div>
             `;
             popup.innerHTML = popupContent;
@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <p>${nextMemberUniversity}</p>
                             </div>
                             <span class="close-popup">&times;</span>
-                            <button class="next-pic">&gt;</button>
                         </div>
                     `;
                 }
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         members.forEach((member, index) => {
             const distanceFromCurrent = Math.abs(index - currentIndex);
-            const opacity = 1 - (distanceFromCurrent * 0.2); // Adjust opacity based on distance from current index
+            const opacity = 1 - (distanceFromCurrent * 0); // Adjust opacity based on distance from current index
             member.style.opacity = opacity.toFixed(1); // Set opacity with one decimal place
         });
     }
