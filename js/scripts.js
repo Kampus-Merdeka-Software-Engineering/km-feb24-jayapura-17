@@ -1,59 +1,95 @@
-/*!
-* Start Bootstrap - Creative v7.0.7 (https://startbootstrap.com/theme/creative)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-creative/blob/master/LICENSE)
-*/
-//
-// Scripts
-// 
+document.addEventListener('DOMContentLoaded', function () {
+    // Restore previous popup functionality
+    const memberPictures = document.querySelectorAll('.member-picture');
+    memberPictures.forEach(picture => {
+        picture.addEventListener('click', function () {
+            const memberId = this.dataset.memberId;
+            const memberName = this.dataset.memberName;
+            const memberUniversity = this.dataset.memberUniversity;
+            const memberImageSrc = this.src;  
 
-window.addEventListener('DOMContentLoaded', event => {
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
 
-    // Navbar shrink function
-    var navbarShrink = function () {
-        const navbarCollapsible = document.body.querySelector('#mainNav');
-        if (!navbarCollapsible) {
-            return;
-        }
-        if (window.scrollY === 0) {
-            navbarCollapsible.classList.remove('navbar-shrink')
-        } else {
-            navbarCollapsible.classList.add('navbar-shrink')
-        }
+            const popupContent = `
+                <div class="popup-content">
+                    <img src="${memberImageSrc}" alt="${memberName}">
+                    <div class="member-details">
+                        <h2>${memberName}</h2>
+                        <p>${memberUniversity}</p>
+                    </div>
+                    <span class="close-popup">&times;</span>
+                    <button class="next-pic">&gt;</button>
+                </div>
+            `;
+            popup.innerHTML = popupContent;
 
-    };
+            document.body.appendChild(popup);
 
-    // Shrink the navbar 
-    navbarShrink();
+            const closePopup = popup.querySelector('.close-popup');
+            closePopup.addEventListener('click', function () {
+                document.body.removeChild(popup);
+            });
 
-    // Shrink the navbar when page is scrolled
-    document.addEventListener('scroll', navbarShrink);
+            const nextPicButton = popup.querySelector('.next-pic');
+            nextPicButton.addEventListener('click', function () {
+                const nextMemberId = (parseInt(memberId) % 10) + 1;
+                const nextMember = document.getElementById(`member${nextMemberId}`);
+                if (nextMember) {
+                    const nextMemberImageSrc = nextMember.querySelector('.member-picture').src;
+                    const nextMemberName = nextMember.querySelector('.member-picture').getAttribute('alt');
+                    const nextMemberUniversity = nextMember.querySelector('.member-picture').dataset.memberUniversity;
 
-    // Activate Bootstrap scrollspy on the main nav element
-    const mainNav = document.body.querySelector('#mainNav');
-    if (mainNav) {
-        new bootstrap.ScrollSpy(document.body, {
-            target: '#mainNav',
-            rootMargin: '0px 0px -40%',
-        });
-    };
+                    popup.innerHTML = `
+                        <div class="popup-content">
+                            <img src="${nextMemberImageSrc}" alt="${nextMemberName}">
+                            <div class="member-details">
+                                <h2>${nextMemberName}</h2>
+                                <p>${nextMemberUniversity}</p>
+                            </div>
+                            <span class="close-popup">&times;</span>
+                            <button class="next-pic">&gt;</button>
+                        </div>
+                    `;
+                }
+            });
 
-    // Collapse responsive navbar when toggler is visible
-    const navbarToggler = document.body.querySelector('.navbar-toggler');
-    const responsiveNavItems = [].slice.call(
-        document.querySelectorAll('#navbarResponsive .nav-link')
-    );
-    responsiveNavItems.map(function (responsiveNavItem) {
-        responsiveNavItem.addEventListener('click', () => {
-            if (window.getComputedStyle(navbarToggler).display !== 'none') {
-                navbarToggler.click();
-            }
+            window.addEventListener('click', function (event) {
+                if (event.target === popup) {
+                    document.body.removeChild(popup);
+                }
+            });
         });
     });
 
-    // Activate SimpleLightbox plugin for portfolio items
-    new SimpleLightbox({
-        elements: '#portfolio a.portfolio-box'
+    // Carousel functionality
+    const galleryTrack = document.querySelector('.gallery-track');
+    const members = document.querySelectorAll('.member');
+    const leftArrow = document.querySelector('.left');
+    const rightArrow = document.querySelector('.right');
+
+    let currentIndex = Math.floor(members.length / 2);
+
+    leftArrow.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + members.length) % members.length;
+        updateGallery();
     });
 
+    rightArrow.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % members.length;
+        updateGallery();
+    });
+
+    function updateGallery() {
+        const newPosition = -currentIndex * members[0].offsetWidth;
+        galleryTrack.style.transform = `translateX(${newPosition}px)`;
+
+        members.forEach((member, index) => {
+            const distanceFromCurrent = Math.abs(index - currentIndex);
+            const opacity = 1 - (distanceFromCurrent * 0.2); // Adjust opacity based on distance from current index
+            member.style.opacity = opacity.toFixed(1); // Set opacity with one decimal place
+        });
+    }
+
+    updateGallery();
 });
