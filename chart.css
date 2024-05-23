@@ -1,0 +1,11 @@
+.chart-container {
+    width: 800px;
+    margin: 50px auto;
+  }
+  
+  /* Style untuk canvas */
+  #line-chart {
+    width: 100%;
+    height: 400px;
+  }
+  

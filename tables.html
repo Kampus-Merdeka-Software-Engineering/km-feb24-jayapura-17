@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Transaction</title>
+    <link rel="stylesheet" href="css/csstable.css">
+</head>
+<body>
+
+<div class="filter-container">
+    <label for="yearFilter">Tahun:</label>
+    <select id="yearFilter"></select>
+    <label for="monthFilter">Bulan:</label>
+    <select id="monthFilter"></select>
+    <label for="dayCategoryFilter">Day Category:</label>
+    <select id="dayCategoryFilter"></select>
+    <label for="priceRangeFilter">Price Range:</label>
+    <select id="priceRangeFilter"></select>
+    <label for="menuCategoryFilter">Menu Category:</label>
+    <select id="menuCategoryFilter"></select>
+    <label for="productTypeFilter">Product Type:</label>
+    <select id="productTypeFilter"></select>
+    <label for="productDetailFilter">Product Detail:</label>
+    <select id="productDetailFilter"></select>
+</div>
+
+<table id="transactionTable">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Transaction Date</th>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Month</th>
+            <th>Hour</th>
+            <th>Transaction Time</th>
+            <th>Transaction Qty</th>
+            <th>Store ID</th>
+            <th>Store Location</th>
+            <th>Unit Price</th>
+            <th>Product ID</th>
+            <th>Menu Category</th>
+            <th>Product Category</th>
+            <th>Product Type</th>
+            <th>Product Detail</th>
+            <th>Sales Revenue</th>
+            <th>Time Category</th>
+            <th>Day Category</th>
+            <th>Price Range</th>
+        </tr>
+    </thead>
+    <tbody id="transactionTableBody">
+        <!-- Data Rows Will Be Inserted Here -->
+    </tbody>
+</table>
+
+<script src="js/tabledata.js"></script>
+</body>
+</html>
