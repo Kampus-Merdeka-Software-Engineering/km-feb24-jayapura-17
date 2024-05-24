@@ -1,0 +1,159 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Heading */
+h1 {
+  font-family: "Arial", sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* CSS untuk tabel */
+#data-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#data-table th,
+#data-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+#data-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#data-table td {
+  background-color: #fff;
+  border-bottom: 1px solid #dddddd;
+}
+
+#data-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect */
+#data-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* CSS untuk filter */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.filters label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filters input[type="text"],
+.filters input[type="date"],
+.filters select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.filters button {
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.filters button:hover {
+  background-color: #45a049;
+}
+
+/* CSS untuk Chart.js container */
+#myChartContainer {
+  width: 80%;
+  height: 400px;
+  margin: 0 auto 40px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* CSS untuk hasil pencarian */
+#results {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+}
+
+/* Table styles for responsiveness */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+td {
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .filters {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .filters label,
+  .filters input[type="text"],
+  .filters input[type="date"],
+  .filters select,
+  .filters button {
+      width: 100%;
+      margin: 5px 0;
+  }
+
+  #myChartContainer {
+      width: 100%;
+  }
+}
