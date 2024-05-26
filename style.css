@@ -140,8 +140,8 @@ td {
 
 @media (max-width: 768px) {
   .filters {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .filters label,
@@ -149,11 +149,11 @@ td {
   .filters input[type="date"],
   .filters select,
   .filters button {
-      width: 100%;
-      margin: 5px 0;
+    width: 100%;
+    margin: 5px 0;
   }
 
   #myChartContainer {
-      width: 100%;
+    width: 100%;
   }
 }

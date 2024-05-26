@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Filter Example</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Data Filter Example</h1>
+
+  <div id="myChartContainer">
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <div class="filters">
+    <div>
+      <label for="transaction_id">Transaction ID:</label>
+      <input type="text" id="transaction_id" placeholder="Enter Transaction ID">
+      <button id="searchButton">Search</button>
+    </div>
+
+    <div>
+      <label for="start_date">Start Date:</label>
+      <input type="date" id="start_date">
+      <label for="end_date">End Date:</label>
+      <input type="date" id="end_date">
+      <button id="dateRangeButton">Filter by Date Range</button>
+    </div>
+
+    <div>
+      <label for="day">Day:</label>
+      <select id="day">
+        <option value="">All</option>
+        <option value="Sunday">Sunday</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="month">Month:</label>
+      <select id="month">
+        <option value="">All</option>
+        <option value="Januari">Januari</option>
+        <option value="Februari">Februari</option>
+        <option value="Maret">Maret</option>
+        <option value="April">April</option>
+        <option value="Mei">Mei</option>
+        <option value="Juni">Juni</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="store_location">Store Location:</label>
+      <select id="store_location">
+        <option value="">All</option>
+        <option value="Lower Manhattan">Lower Manhattan</option>
+        <option value="Hell's Kitchen">Hell's Kitchen</option>
+        <option value="Astoria">Astoria</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="menu_category">Menu Category:</label>
+      <select id="menu_category">
+        <option value="">All</option>
+        <option value="Makanan">Makanan</option>
+        <option value="Minuman">Minuman</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="product_category">Product Category:</label>
+      <select id="product_category">
+        <option value="">All</option>
+        <option value="Bakery">Bakery</option>
+        <option value="Branded">Branded</option>
+        <option value="Coffee">Coffee</option>
+        <option value="Coffee beans">Coffee beans</option>
+        <option value="Drinking Chocolate">Drinking Chocolate</option>
+        <option value="Flavours">Flavours</option>
+        <option value="Packaged chocolate">Packaged chocolate</option>
+        <option value="Tea">Tea</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="product_type">Product Type:</label>
+      <select id="product_type">
+        <option value="">All</option>
+        <option value="Biscotti">Biscotti</option>
+        <option value="Pastry">Pastry</option>
+        <option value="Scone">Scone</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Housewares">Housewares</option>
+        <option value="Barista Espresso">Barista Espresso</option>
+        <option value="Drip Coffee">Drip Coffee</option>
+        <option value="Gourmet Brewed Coffee">Gourmet Brewed Coffee</option>
+        <option value="Premium Brewed Coffee">Premium Brewed Coffee</option>
+        <option value="Espresso Beans">Espresso Beans</option>
+        <option value="Gourmet Beans">Gourmet Beans</option>
+        <option value="Green Beans">Green Beans</option>
+        <option value="House Blend Beans">House Blend Beans</option>
+        <option value="Organic Beans">Organic Beans</option>
+        <option value="Premium Beans">Premium Beans</option>
+        <option value="Sugar free syrup">Sugar free syrup</option>
+        <option value="Regular syrup">Regular syrup</option>
+        <option value="Black Tea">Black Tea</option>
+        <option value="Chai Tea">Chai Tea</option>
+        <option value="Green Tea">Green Tea</option>
+        <option value="Herbal Tea">Herbal Tea</option>
+        <option value="Brewed Black Tea">Brewed Black Tea</option>
+        <option value="Brewed Green Tea">Brewed Green Tea</option>
+        <option value="Brewed Herbal Tea">Brewed Herbal Tea</option>
+        <option value="Drinking Chocolate">Drinking Chocolate</option>
+        <option value="Organic Chocolate">Organic Chocolate</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="time_category">Time Category:</label>
+      <select id="time_category">
+        <option value="">All</option>
+        <option value="Pagi">Pagi</option>
+        <option value="Siang">Siang</option>
+        <option value="Sore">Sore</option>
+        <option value="Malam">Malam</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="day_category">Day Category:</label>
+      <select id="day_category">
+        <option value="">All</option>
+        <option value="Weekend">Weekend</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="price_range">Price Range:</label>
+      <select id="price_range">
+        <option value="">All</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+
+    <button id="filterButton">Filter</button>
+  </div>
+
+  <div id="results"></div>
+
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Transaction ID</th>
+        <th>Transaction Date</th>
+        <th>Day</th>
+        <th>Date</th>
+        <th>Month</th>
+        <th>Hour</th>
+        <th>Transaction Time</th>
+        <th>Transaction Qty</th>
+        <th>Store ID</th>
+        <th>Store Location</th>
+        <th>Unit Price</th>
+        <th>Product ID</th>
+        <th>Menu Category</th>
+        <th>Product</th>
+        <th>Product Type</th>
+        <th>Product Detail</th>
+        <th>Sales Revenue</th>
+        <th>Time Category</th>
+        <th>Day Category</th>
+        <th>Price Range</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,56 +1,45 @@
-import user from './sample.json' assert { type: 'json' };
+import data from './sample.json' assert { type: 'json' };
 
 document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.querySelector('#data-table tbody');
-  const filterButton = document.getElementById("filterButton");
-  const searchButton = document.getElementById("searchButton");
-  const dateSearchButton = document.getElementById("dateSearchButton");
-  const dateRangeButton = document.getElementById("dateRangeButton");
-  const resultsContainer = document.getElementById("results");
   const ctx = document.getElementById('myChart').getContext('2d');
+  const storeSelect = document.getElementById('storeSelect');
+  const filterButton = document.getElementById('filterButton');
+  const prevPageButton = document.getElementById('prevPage');
+  const nextPageButton = document.getElementById('nextPage');
+  const pageNumberElement = document.getElementById('pageNumber');
+  const itemsPerPage = 10;
+  let currentPage = 1;
+  let currentChart;
 
-  // calculate total revenue per month for each store
-  function calculateTotalRevenueByStoreAndMonth() {
+  // Fungsi untuk menghitung total pendapatan per bulan untuk setiap toko
+  function calculateTotalRevenueByStoreAndMonth(data) {
     const stores = {
       "Astoria": Array(6).fill(0),
       "Hell's Kitchen": Array(6).fill(0),
       "Lower Manhattan": Array(6).fill(0)
     };
 
-    user.forEach(item => {
+    data.forEach(item => {
       const store = item.store_location;
-      const month = item.month;
+      const month = new Date(item.transaction_date).getMonth();
       const revenue = parseFloat(item.sales_revenue);
 
-      if (store in stores && month) {
-        switch (month) {
-          case "Januari":
-            stores[store][0] += revenue;
-            break;
-          case "Februari":
-            stores[store][1] += revenue;
-            break;
-          case "Maret":
-            stores[store][2] += revenue;
-            break;
-          case "April":
-            stores[store][3] += revenue;
-            break;
-          case "Mei":
-            stores[store][4] += revenue;
-            break;
-          case "Juni":
-            stores[store][5] += revenue;
-            break;
-        }
+      if (store in stores) {
+        stores[store][month] += revenue;
       }
     });
 
     return stores;
   }
 
-  // Function to create chart
+  // Fungsi untuk membuat grafik
   function createChart(data) {
+    // Hancurkan chart sebelumnya jika ada
+    if (currentChart) {
+      currentChart.destroy();
+    }
+
     const chartData = {
       labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni"],
       datasets: [
@@ -97,100 +86,69 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    new Chart(ctx, {
+    // Buat chart baru
+    currentChart = new Chart(ctx, {
       type: 'line',
       data: chartData,
       options: chartOptions
     });
   }
 
-  // Calculate total revenue by store and month
-  const totalRevenueByStoreAndMonth = calculateTotalRevenueByStoreAndMonth();
-
-  // Create chart using the calculated data
-  createChart(totalRevenueByStoreAndMonth);
-
-  // Function to filter data based on selected criteria
-  function filterData() {
-    const dayFilter = document.getElementById("day").value;
-    const monthFilter = document.getElementById("month").value;
-    const storeFilter = document.getElementById("store_location").value;
-
-    const filteredData = user.filter(item => {
-      return (!dayFilter || item.day_ === dayFilter) &&
-             (!monthFilter || item.month === monthFilter) &&
-             (!storeFilter || item.store_location === storeFilter);
-    });
-
-    displayResults(filteredData);
-  }
-
-  // Function to search data by transaction_id
-  function searchByTransactionId() {
-    const transactionId = document.getElementById("transaction_id").value;
-    const filteredData = user.filter(item => item.transaction_id === transactionId);
-    displayResults(filteredData);
-  }
-
-  // Function to search data by transaction_date
-  function searchByTransactionDate() {
-    const transactionDate = document.getElementById("transaction_date").value;
-    const filteredData = user.filter(item => item.transaction_date === transactionDate);
-    displayResults(filteredData);
-  }
-
-  // Function to filter data by date range
-  function filterByDateRange() {
-    const startDate = new Date(document.getElementById("start_date").value);
-    const endDate = new Date(document.getElementById("end_date").value);
-
-    const filteredData = user.filter(item => {
-      const transactionDate = new Date(item.transaction_date);
-      return transactionDate >= startDate && transactionDate <= endDate;
-    });
-
-    displayResults(filteredData);
-  }
-
-  // Function to display filtered results
-  function displayResults(data) {
-    tableBody.innerHTML = "";
-
-    if (data.length === 0) {
-      resultsContainer.innerHTML = "No results found.";
-      return;
-    }
-
-    data.forEach(item => {
+  // Fungsi untuk memperbarui tabel
+  function updateTable(data, page = 1, itemsPerPage = 10) {
+    tableBody.innerHTML = '';
+    const start = (page - 1) * itemsPerPage;
+    const end = page * itemsPerPage;
+    const paginatedData = data.slice(start, end);
+    paginatedData.forEach(item => {
       const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${item.transaction_id}</td>
-        <td>${item.transaction_date}</td>
-        <td>${item.day_}</td>
-        <td>${item.date}</td>
-        <td>${item.month}</td>
-        <td>${item.hour_}</td>
-        <td>${item.transaction_time}</td>
-        <td>${item.transaction_qty}</td>
-        <td>${item.store_id}</td>
-        <td>${item.store_location}</td>
-        <td>${item.unit_price}</td>
-        <td>${item.product_id}</td>
-        <td>${item.menu_category}</td>
-        <td>${item.product}</td>
-        <td>${item.product_type}</td>
-        <td>${item.product_detail}</td>
-        <td>${item.sales_revenue}</td>
-        <td>${item.time_category}</td>
-        <td>${item.day_category}</td>
-        <td>${item.price_range}</td>
-      `;
+      for (const key in item) {
+        const cell = document.createElement('td');
+        cell.textContent = item[key];
+        row.appendChild(cell);
+      }
       tableBody.appendChild(row);
     });
   }
 
-  filterButton.addEventListener("click", filterData);
-  searchButton.addEventListener("click", searchByTransactionId);
-  dateSearchButton.addEventListener("click", searchByTransactionDate);
-  dateRangeButton.addEventListener("click", filterByDateRange);
+  // Fungsi untuk memperbarui pagination
+  function updatePagination(totalItems, currentPage, itemsPerPage) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    pageNumberElement.textContent = currentPage;
+    prevPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage === totalPages;
+  }
+
+  // Load data awal
+  const totalRevenueByStoreAndMonth = calculateTotalRevenueByStoreAndMonth(data);
+  createChart(totalRevenueByStoreAndMonth);
+  updateTable(data, currentPage, itemsPerPage);
+  updatePagination(data.length, currentPage, itemsPerPage);
+
+  // Event listener untuk filter
+  filterButton.addEventListener('click', () => {
+    const selectedStore = storeSelect.value;
+    const filteredData = data.filter(item => selectedStore === 'All' || item.store_location === selectedStore);
+    const filteredRevenue = calculateTotalRevenueByStoreAndMonth(filteredData);
+    createChart(filteredRevenue);
+    updateTable(filteredData, currentPage, itemsPerPage);
+    updatePagination(filteredData.length, currentPage, itemsPerPage);
+  });
+
+  // Event listeners untuk pagination
+  prevPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      updateTable(data, currentPage, itemsPerPage);
+      updatePagination(data.length, currentPage, itemsPerPage);
+    }
+  });
+
+  nextPageButton.addEventListener('click', () => {
+    if (currentPage * itemsPerPage < data.length) {
+      currentPage++;
+      updateTable(data, currentPage, itemsPerPage);
+      updatePagination(data.length, currentPage, itemsPerPage);
+    }
+  });
 });
