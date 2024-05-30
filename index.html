@@ -11,6 +11,17 @@
   <div class="container">
     <h1>Data Filter Example</h1>
 
+    <div class="summary-boxes">
+      <div class="summary-box" id="totalRevenueBox">
+        <h3>Total Revenue</h3>
+        <p id="totalRevenue">0</p>
+      </div>
+      <div class="summary-box" id="totalTransactionBox">
+        <h3>Total Transactions</h3>
+        <p id="totalTransactions">0</p>
+      </div>
+    </div>
+
     <div class="filters">
       <label for="storeSelect">Select Store:</label>
       <select id="storeSelect">
@@ -19,6 +30,19 @@
         <option value="Hell's Kitchen">Hell's Kitchen</option>
         <option value="Lower Manhattan">Lower Manhattan</option>
       </select>
+
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" value="2024-01-01">
+
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" value="2024-06-01">
+
+      <label for="metricSelect">Select Metric:</label>
+      <select id="metricSelect">
+        <option value="total_revenue">Total Revenue</option>
+        <option value="total_transactions">Total Transactions</option>
+      </select>
+
       <button id="filterButton">Filter</button>
     </div>
 
@@ -26,41 +50,11 @@
       <canvas id="myChart"></canvas>
     </div>
 
-    <table id="data-table">
-      <thead>
-        <tr>
-          <th>Transaction ID</th>
-          <th>Transaction Date</th>
-          <th>Day</th>
-          <th>Date</th>
-          <th>Month</th>
-          <th>Hour</th>
-          <th>Transaction Time</th>
-          <th>Transaction Qty</th>
-          <th>Store ID</th>
-          <th>Store Location</th>
-          <th>Unit Price</th>
-          <th>Product ID</th>
-          <th>Menu Category</th>
-          <th>Product</th>
-          <th>Product Type</th>
-          <th>Product Detail</th>
-          <th>Sales Revenue</th>
-          <th>Time Category</th>
-          <th>Day Category</th>
-          <th>Price Range</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div class="pagination">
-      <button id="prevPage">Previous</button>
-      <span id="pageNumber">1</span>
-      <button id="nextPage">Next</button>
+    <div id="stackedBarChartContainer">
+      <canvas id="stackedBarChart"></canvas>
     </div>
   </div>
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js" type="module"></script>
 </body>
 </html>

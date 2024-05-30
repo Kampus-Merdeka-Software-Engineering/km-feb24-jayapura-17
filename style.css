@@ -100,15 +100,30 @@ h1 {
 }
 
 /* CSS untuk Chart.js container */
-#myChartContainer {
-  width: 80%;
-  height: 400px;
-  margin: 0 auto 40px;
-  padding: 20px;
+.chart-container {
+  width: 100%;
+  margin: 10px auto;
+  padding: 10px;
   background: #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
+
+.chart-box {
+  width: 5px;  /* Mengubah ukuran lebar chart-box */
+  max-width: 10px;
+  height: 10px;  /* Mengubah ukuran tinggi chart-box */
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 
 /* CSS untuk hasil pencarian */
 #results {
@@ -153,7 +168,65 @@ td {
     margin: 5px 0;
   }
 
-  #myChartContainer {
+  .chart-box {
     width: 100%;
+    height: auto;
   }
+}
+
+.summary-boxes {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.summary-box {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  width: 200px;
+}
+
+.summary-box h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.summary-box p {
+  font-size: 24px;
+  margin: 5px 0 0;
+}
+
+#totalRevenue, #totalTransactions {
+  font-weight: bold;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+label {
+  margin-right: 5px;
+}
+
+#data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#data-table th, #data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#data-table th {
+  background-color: #f2f2f2;
+}
+
+#prevPage, #nextPage {
+  margin: 10px;
 }

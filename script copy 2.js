@@ -1,18 +1,23 @@
 import data from './sample.json' assert { type: 'json' };
 
 document.addEventListener('DOMContentLoaded', () => {
+  const tableBody = document.querySelector('#data-table tbody');
   const ctxLine = document.getElementById('myChart').getContext('2d');
-  const ctxBar = document.getElementById('stackedBarChart').getContext('2d');
+  const ctxDonut = document.getElementById('donutChart').getContext('2d');
   const storeSelect = document.getElementById('storeSelect');
   const filterButton = document.getElementById('filterButton');
+  const prevPageButton = document.getElementById('prevPage');
+  const nextPageButton = document.getElementById('nextPage');
+  const pageNumberElement = document.getElementById('pageNumber');
   const metricSelect = document.getElementById('metricSelect');
   const totalRevenueElement = document.getElementById('totalRevenue');
   const totalTransactionsElement = document.getElementById('totalTransactions');
+  const itemsPerPage = 10;
+  let currentPage = 1;
   let currentLineChart;
-  let currentBarChart;
+  let currentDonutChart;
 
-
-  // menghitung total berdasarkan toko, bulan, dan metrik
+  // Fungsi untuk menghitung total berdasarkan toko, bulan, dan metrik
   function calculateTotalByStoreAndMonth(data, metric) {
     const stores = {
       "Astoria": Array(6).fill(0),
@@ -33,8 +38,31 @@ document.addEventListener('DOMContentLoaded', () => {
     return stores;
   }
 
+  // Fungsi untuk menghitung persentase Menu Category
+  function calculateCategoryPercentages(data) {
+    const categories = {
+      "Makanan": 0,
+      "Minuman ": 0,
+      "Merchandise": 0
+    };
 
-   // menghitung total pendapatan dan transaksi
+    data.forEach(item => {
+      if (item.menu_category in categories) {
+        categories[item.menu_category]++;
+      }
+    });
+
+    const totalItems = data.length;
+    const percentages = {};
+
+    for (const category in categories) {
+      percentages[category] = (categories[category] / totalItems) * 100;
+    }
+
+    return percentages;
+  }
+
+  // Fungsi untuk menghitung total pendapatan dan transaksi
   function calculateTotals(data) {
     let totalRevenue = 0;
     let totalTransactions = 0;
@@ -47,27 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return { totalRevenue, totalTransactions };
   }
 
-  // Fungsi untuk membuat grafik stacked bar 
-  function calculateCategoryTotals(data, metric) {
-    const categoryTotals = {};
-
-    data.forEach(item => {
-      const category = item.product_category;
-      const value = metric === 'total_revenue' ? parseFloat(item.sales_revenue) : parseInt(item.transaction_qty);
-
-      if (!categoryTotals[category]) {
-        categoryTotals[category] = 0;
-      }
-
-      categoryTotals[category] += value;
-    });
-
-    return categoryTotals;
-  }
-
-  // Fungsi untuk membuat grafik garis  
+  // Fungsi untuk membuat grafik garis
   function createLineChart(data, metric) {
-    
     // Hancurkan chart sebelumnya jika ada
     if (currentLineChart) {
       currentLineChart.destroy();
@@ -127,52 +136,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  //Menghancurkan stacked bar sebelumnya 
-  function createStackedBarChart(data, metric) {
-    if (currentBarChart) {
-      currentBarChart.destroy();
+  // Fungsi untuk membuat grafik donat
+  function createDonutChart(data) {
+    // Hancurkan chart sebelumnya jika ada
+    if (currentDonutChart) {
+      currentDonutChart.destroy();
     }
-    const labels = Object.keys(data);
-    const values = Object.values(data);
-    const total = values.reduce((sum, value) => sum + value, 0);
-    const percentages = values.map(value => (value / total * 100).toFixed(2));
 
     const chartData = {
-      labels: labels,
+      labels: ["Makanan", "Minuman ", "Merchandise"],
       datasets: [{
-        label: `Total ${metric === 'total_revenue' ? 'Revenue' : 'Transactions'} (%)`,
-        data: percentages,
-        backgroundColor: ['red', 'blue', 'green', 'orange', 'purple', 'yellow']
+        data: [data["Makanan"], data["Minuman "], data["Merchandise"]],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
       }]
     };
 
     const chartOptions = {
       responsive: true,
-      scales: {
-        xAxes: [{
-          stacked: true
-        }],
-        yAxes: [{
-          stacked: true,
-          ticks: {
-            beginAtZero: true,
-            callback: function(value) { return value + "%" }
-          }
-        }]
-      },
       title: {
         display: true,
-        text: `Percentage of ${metric === 'total_revenue' ? 'Revenue' : 'Transactions'} by Product Category`
+        text: "Menu Category Percentage"
       }
     };
 
-  // stacked bar baru 
-  currentBarChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: chartData,
-    options: chartOptions
-  });
-}
+    // Buat chart baru
+    currentDonutChart = new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: chartData,
+      options: chartOptions
+    });
+  }
+
+  // Fungsi untuk memperbarui tabel
+  function updateTable(data, page = 1, itemsPerPage = 10) {
+    tableBody.innerHTML = '';
+    const start = (page - 1) * itemsPerPage;
+    const end = page * itemsPerPage;
+    const paginatedData = data.slice(start, end);
+    paginatedData.forEach(item => {
+      const row = document.createElement('tr');
+      for (const key in item) {
+        const cell = document.createElement('td');
+        cell.textContent = item[key];
+        row.appendChild(cell);
+      }
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Fungsi untuk memperbarui pagination
+  function updatePagination(totalItems, currentPage, itemsPerPage) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    pageNumberElement.textContent = currentPage;
+    prevPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage === totalPages;
+  }
 
   // Fungsi untuk memperbarui kotak total
   function updateTotalsBox(totals) {
@@ -181,9 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Load data awal
-  const initialMetric = metricSelect.value;
-  const initialTotalByStoreAndMonth = calculateTotalByStoreAndMonth(data, initialMetric);
-  createLineChart(initialTotalByStoreAndMonth, initialMetric);
+  const metric = metricSelect.value;
+  const totalByStoreAndMonth = calculateTotalByStoreAndMonth(data, metric);
+  const categoryPercentages = calculateCategoryPercentages(data);
+  createLineChart(totalByStoreAndMonth, metric);
+  createDonutChart(categoryPercentages);
+  updateTable(data, currentPage, itemsPerPage);
+  updatePagination(data.length, currentPage, itemsPerPage);
   const initialTotals = calculateTotals(data);
   updateTotalsBox(initialTotals);
 
@@ -194,20 +216,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const endDate = new Date(document.getElementById('endDate').value);
     const metric = metricSelect.value;
 
-     // Filter data berdasarkan toko, rentang tanggal, dan metrik
+    // Filter data berdasarkan toko, rentang tanggal, dan metrik
     const filteredData = data.filter(item => {
       const transactionDate = new Date(item.transaction_date);
       return (selectedStore === 'All' || item.store_location === selectedStore) &&
              (transactionDate >= startDate && transactionDate <= endDate);
     });
 
-     // Hitung total berdasarkan toko, bulan, dan metrik
+    // Hitung total berdasarkan toko, bulan, dan metrik
     const filteredTotal = calculateTotalByStoreAndMonth(filteredData, metric);
-    const filteredTotals = calculateTotals(filteredData);
-    const categoryTotals = calculateCategoryTotals(filteredData, metric);
 
+    // Hitung persentase kategori menu
+    const filteredCategoryPercentages = calculateCategoryPercentages(filteredData);
+
+    // Hitung total pendapatan dan transaksi
+    const filteredTotals = calculateTotals(filteredData);
+
+    // Update grafik, tabel, kotak total, dan pagination dengan data yang difilter
     createLineChart(filteredTotal, metric);
-    createStackedBarChart(categoryTotals, metric);
+    createDonutChart(filteredCategoryPercentages);
+    updateTable(filteredData, currentPage, itemsPerPage);
     updateTotalsBox(filteredTotals);
+    updatePagination(filteredData.length, currentPage, itemsPerPage);
+  });
+
+  // Event listeners untuk pagination
+  prevPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      updateTable(data, currentPage, itemsPerPage);
+      updatePagination(data.length, currentPage, itemsPerPage);
+    }
+  });
+
+  nextPageButton.addEventListener('click', () => {
+    if (currentPage * itemsPerPage < data.length) {
+      currentPage++;
+      updateTable(data, currentPage, itemsPerPage);
+      updatePagination(data.length, currentPage, itemsPerPage);
+    }
   });
 });
