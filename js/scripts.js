@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+	const navLinks = document.querySelector(".nav-links");
+
+	menuToggle.addEventListener("click", () => {
+		navLinks.classList.toggle("show");
+	});
     // Restore previous popup functionality
     const memberPictures = document.querySelectorAll('.member-picture');
     memberPictures.forEach(picture => {

@@ -26,11 +26,6 @@ header{
 	text-align: center;
 }
 
-/* header img {
-	width: 100px;
-	margin-bottom: 1rem;
-} */
-
 header h1{
 	font-size: 85px;
 	margin-top: 180px;
@@ -65,9 +60,10 @@ nav {
 	align-items: center;
 	margin-bottom: 2rem;
 	position: absolute;
-	top: 0;
+	top: 0px;
 	width: 100% ;
 	padding: 20px 7px;
+	z-index: 1000; /* Ensure nav is above other content */
 }
 
 nav img{
@@ -96,6 +92,44 @@ nav a{
 nav a:hover{
 	color: #f4623a;
 	cursor: pointer;
+}
+
+.menu-toggle {
+	display: none;
+	background: none;
+	border: none;
+	color: white;
+	font-size: 2rem;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+	nav ul {
+		display: none;
+		flex-direction: column;
+		width: 100%;
+		background-color: rgba(255, 255, 255, 0);
+		position: absolute;
+		top: 60px;
+		left: 0;
+		padding: 10px 0;
+		z-index: 1000;
+	}
+
+	nav ul.show {
+		display: flex;
+	}
+
+	nav a {
+		margin: 0.5rem 0;
+		text-align: center;
+		width: 100%;
+		padding: 10px 0;
+	}
+
+	.menu-toggle {
+		display: block;
+	}
 }
 
 main {
@@ -155,20 +189,60 @@ footer a {
 }
 
 @media only screen and (max-width: 600px) {
-	header{
-		flex-direction: column;
+	header h1{
+		font-size: 50px;
+		margin-top: 100px;
+	}
+
+	header p{
+		font-size: 16px;
+	}
+
+	header a.cta{
+		padding: 0.75rem 1.5rem;
 	}
 
 	nav {
 		flex-direction: column;
+		align-items: center;
+		padding: 10px;
+	}
+
+	nav ul {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	nav a {
+		margin: 0.5rem 0;
 	}
 
 	main {
 		flex-direction: column;
+		padding: 1rem 0;
 	}
 
 	section {
 		width: 100%;
+		margin: 1rem 0;
+	}
+
+	.service {
+		width: 100%;
+		margin: 2rem 0;
+	}
+
+	.service img {
+		width: 100px;
+	}
+
+	.gallery {
+		padding: 10px;
+	}
+
+	.member img {
+		width: 100px;
+		height: 100px;
 	}
 }
 
@@ -209,6 +283,10 @@ footer a {
 		width: 100%;
 		margin: 2rem 0;
 	}
+
+	.service img {
+		width: 100px;
+	}
 }
 
 #about {
@@ -229,8 +307,6 @@ footer a {
     padding: 20px; /* Add padding */
     border-radius: 10px; /* Add border radius */
 }
-
-
 
 .gallery-track {
     display: flex;
@@ -255,6 +331,17 @@ footer a {
     width: 150px;
     height: 150px;
     object-fit: cover;
+}
+
+@media only screen and (max-width: 600px) {
+	.gallery {
+		padding: 10px;
+	}
+
+	.member img {
+		width: 100px;
+		height: 100px;
+	}
 }
 
 .member-picture {
