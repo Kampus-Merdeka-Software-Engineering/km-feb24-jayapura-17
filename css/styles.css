@@ -1,0 +1,474 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "poppins", sans-serif;
+}
+
+header {
+  background-image: url("../assets/img/coffee.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 85px;
+  margin-top: 180px;
+  font-weight: 500;
+}
+
+header p {
+  font-size: 20px;
+  margin: 1.5rem 0;
+}
+
+header a.cta {
+  background-color: #fff;
+  color: #f4623a;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 60px;
+  margin-top: 1rem;
+  transition: all 0.2s;
+}
+
+header a.cta:hover {
+  background-color: #f4623a;
+  color: #fff;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  padding: 20px;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+nav img {
+  height: 40px;
+}
+
+nav h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #fff;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+nav a:hover {
+  color: #f4623a;
+  cursor: pointer;
+}
+
+/* nav .nav-links {
+	display: flex;
+	list-style: none;
+  }
+  
+  nav .nav-links li {
+	margin: 0 15px;
+  }
+  
+  nav .nav-links a {
+	color: #f2f2f2;
+	text-decoration: none;
+	font-size: 18px;
+  }
+  
+  nav .nav-links a:hover {
+	color: #f4623a;
+  } */
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  nav {
+	background-color: #f4623a;
+    
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgba(238, 115, 33, 0);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  nav a {
+    margin: 0.5rem 0;
+    text-align: left;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  nav .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #f4623a;
+    padding: 10px 0;
+  }
+
+  nav .nav-links.active {
+    display: flex;
+  }
+
+  nav .nav-links li {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  nav .nav-links a:hover {
+    color: #ddd;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+section {
+  width: 80%;
+  text-align: center;
+  margin: 2rem;
+}
+
+section h2 {
+  color: #f4623a;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+section a.btn {
+  background-color: #fff;
+  border: 1px solid #f4623a;
+  color: #f4623a;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 60px;
+  margin-top: 1rem;
+  transition: all 0.2s;
+}
+
+section a.btn:hover {
+  background-color: #f4623a;
+  color: #fff;
+  cursor: pointer;
+}
+
+footer {
+  background-color: #ff91009a;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+footer p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+footer a {
+  color: #fff;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+  header h1 {
+    font-size: 50px;
+    margin-top: 100px;
+  }
+
+  header p {
+    font-size: 16px;
+  }
+
+  header a.cta {
+    padding: 0.75rem 1.5rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav a {
+    margin: 0.5rem 0;
+  }
+
+  main {
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  section {
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .service {
+    width: 100%;
+    margin: 2rem 0;
+  }
+
+  .service img {
+    width: 100px;
+  }
+
+  .gallery {
+    padding: 10px;
+  }
+
+  .member img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+#services {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+#services h2 {
+  margin-bottom: 5rem;
+}
+
+.service {
+  width: 30%;
+  display: inline-block;
+  padding: 0 1rem;
+  text-align: justify;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.service img {
+  width: 150px;
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  display: block; /* Menyelesaikan masalah ruang putih di bawah gambar */
+  margin: 0 auto; /* Menengahkan gambar */
+}
+
+.service h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .service {
+    width: 100%;
+    margin: 2rem 0;
+  }
+
+  .service img {
+    width: 100px;
+  }
+}
+
+#about {
+  padding: 50px 8%;
+}
+
+#about img {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.gallery {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  border: 2px solid #fff; /* Add border */
+  background-color: #fff; /* Add background color */
+  padding: 20px; /* Add padding */
+  border-radius: 10px; /* Add border radius */
+}
+
+.gallery-track {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+.member {
+  flex: 0 0 auto;
+  margin-right: 10px;
+  opacity: 0.7; /* Set initial opacity */
+  transition: opacity 0.3s;
+  border: 2px solid #fff; /* Add border */
+  border-radius: 5px; /* Add border radius */
+  box-sizing: content-box; /* Adjust box-sizing */
+}
+
+.member.active {
+  opacity: 1;
+}
+
+.member img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+@media only screen and (max-width: 600px) {
+  .gallery {
+    padding: 10px;
+  }
+
+  .member img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.member-picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent; /* Set a transparent border initially */
+  border-radius: 10%;
+  margin-right: 10px;
+  box-sizing: content-box;
+}
+
+.member-picture:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 40px #f4623a;
+  border-color: #f4623a; /* Show border on hover */
+}
+
+/* Popup styles */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.popup-content img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.member-details {
+  margin-top: 10px;
+}
+
+.close-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 36px;
+  cursor: pointer;
+  z-index: 1;
+  background-color: transparent; /* Background color for the border */
+  border: 2px solid transparent; /* Add border */
+  border-radius: 0%; /* Make the arrow circular */
+  color: #fff;
+  outline: none;
+  transition: color 0.3s, background-color 0.3s; /* Add transition for background color */
+  padding: 10px; /* Add padding */
+}
+
+.arrow:hover {
+  background-color: #f4623a; /* Change background color on hover */
+}
+
+.left {
+  left: 20px;
+}
+
+.right {
+  right: 20px;
+}
