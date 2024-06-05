@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Filter Example</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <title>Coffee Shop Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Data Filter Example</h1>
+    <h1>Coffee Shop Dashboard</h1>
 
     <div class="summary-boxes">
       <div class="summary-box" id="totalRevenueBox">
@@ -46,30 +47,32 @@
       <button id="filterButton">Filter</button>
     </div>
 
-    <!-- Additional line charts -->
-    <div id="timeCategoryLineChartContainer">
-      <canvas id="timeCategoryLineChart"></canvas>
+    <div class="chart-container">
+      <div class="chart-box">
+        <h2>Total Revenue by Time Category</h2>
+        <canvas id="timeCategoryLineChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h2>Total Revenue by Day Category</h2>
+        <canvas id="dayCategoryLineChart"></canvas>
+      </div>
     </div>
 
-    <div id="dayCategoryLineChartContainer">
-      <canvas id="dayCategoryLineChart"></canvas>
+    <div class="chart-container">
+      <div class="chart-box">
+        <h2>Total Revenue by Store and Month</h2>
+        <canvas id="lineChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h2>Total Revenue by Product and Store</h2>
+        <canvas id="stackedBarChart"></canvas>
+      </div>
     </div>
 
-    <!-- Existing charts -->
-    <div id="lineChartContainer">
-      <canvas id="lineChart"></canvas>
-    </div>
-
-    <div id="myChartContainer">
-      <canvas id="myChart"></canvas>
-    </div>
-
-    <div id="stackedBarChartContainer">
-      <canvas id="stackedBarChart"></canvas>
-    </div>
   </div>
 
   <script src="script.js" type="module"></script>
-  <script src="lineChart.js" type="module"></script>
 </body>
 </html>
