@@ -1,4 +1,4 @@
-import data from './sample.json' with { type: 'json' };
+import data from '../sample.json' with { type: 'json' };
 
 document.addEventListener('DOMContentLoaded', () => {
   const ctxLine = document.getElementById('lineChart').getContext('2d');
