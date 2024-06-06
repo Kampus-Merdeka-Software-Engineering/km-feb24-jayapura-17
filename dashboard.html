@@ -10,19 +10,17 @@
   <script src="js/script.js" type="module"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Coffee Shop Dashboard</h1>
-
-    <div class="summary-boxes">
-      <div class="summary-box" id="totalRevenueBox">
-        <h3>Total Revenue</h3>
-        <p id="totalRevenue">0</p>
-      </div>
-      <div class="summary-box" id="totalTransactionBox">
-        <h3>Total Transactions</h3>
-        <p id="totalTransactions">0</p>
-      </div>
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">Coffee Shop Dashboard</a>
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+      </ul>
     </div>
+  </nav>
+
+  <div class="container">
+    <!-- <h1>Coffee Shop Dashboard</h1> -->
 
     <div class="filters">
       <label for="storeSelect">Select Store:</label>
@@ -45,9 +43,33 @@
         <option value="total_transactions">Total Transactions</option>
       </select>
 
+      <label for="productSelect">Product:</label>
+        <select id="productSelect">
+          <option value="all">All</option>
+          <option value="Coffee">Coffee</option>
+          <option value="Tea">Tea</option>
+          <option value="Bakery">Bakery</option>
+          <option value="Drinking Chocolate">Drinking Chocolate</option>
+          <option value="Loose Tea">Loose Tea</option>
+          <option value="Coffee beans">Coffee beans</option>
+          <option value="Branded">Branded</option>
+          <option value="Packaged Chocolate">Packaged Chocolate</option>
+          <option value="Flavours">Flavours</option>
+        </select>
       <button id="filterButton">Filter</button>
     </div>
 
+    <div class="summary-boxes">
+      <div class="summary-box" id="totalRevenueBox">
+        <h3>Total Revenue</h3>
+        <p id="totalRevenue">0</p>
+      </div>
+      <div class="summary-box" id="totalTransactionBox">
+        <h3>Total Transactions</h3>
+        <p id="totalTransactions">0</p>
+      </div>
+    </div>
+    
     <div class="chart-container">
       <div class="chart-box">
         <h2>Total Revenue by Time Category</h2>
@@ -72,6 +94,20 @@
       </div>
     </div>
 
+    <div class="chart-container">
+      <div class="chart-box">
+        <h2 id="productChartTitle">Product Category per Month</h2>
+        <canvas id="productCategoryLineChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h2 id="detailChartTitle">Product Details per Store</h2>
+        <canvas id="productBarChart"></canvas>
+        <p id="placeholderText" style="text-align: center; color: grey">
+          Choose Product to See this Chart
+        </p>
+      </div>
+    </div>
   </div>
 </body>
 </html>

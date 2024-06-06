@@ -110,6 +110,13 @@ nav a:hover {
 	color: #f4623a;
   } */
 
+  .containerf {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
 .menu-toggle {
   display: none;
   background: none;
@@ -120,7 +127,7 @@ nav a:hover {
 
 @media only screen and (max-width: 600px) {
   nav {
-	background-color: #f4623a;
+	background-color: #f4623a93;
     
   }
 
@@ -154,12 +161,13 @@ nav a:hover {
     position: absolute;
     top: 60px;
     left: 0;
-    background-color: #f4623a;
+    background-color: #f4623a93;
     padding: 10px 0;
   }
 
   nav .nav-links.active {
     display: flex;
+    margin-top: 3px;
   }
 
   nav .nav-links li {

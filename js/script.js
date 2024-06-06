@@ -1,22 +1,37 @@
 import data from '../sample.json' with { type: 'json' };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const ctxLine = document.getElementById('lineChart').getContext('2d');
-  const ctxBar = document.getElementById('stackedBarChart').getContext('2d');
-  const ctxTimeCategoryLine = document.getElementById('timeCategoryLineChart').getContext('2d');
-  const ctxDayCategoryLine = document.getElementById('dayCategoryLineChart').getContext('2d');
+  const lineChartElement = document.getElementById('lineChart');
+  const stackedBarChartElement = document.getElementById('stackedBarChart');
+  const timeCategoryLineChartElement = document.getElementById('timeCategoryLineChart');
+  const dayCategoryLineChartElement = document.getElementById('dayCategoryLineChart');
+  const productCategoryLineChartElement = document.getElementById('productCategoryLineChart');
+  const productBarChartElement = document.getElementById('productBarChart');
+
+  const ctxLine = lineChartElement ? lineChartElement.getContext('2d') : null;
+  const ctxBar = stackedBarChartElement ? stackedBarChartElement.getContext('2d') : null;
+  const ctxTimeCategoryLine = timeCategoryLineChartElement ? timeCategoryLineChartElement.getContext('2d') : null;
+  const ctxDayCategoryLine = dayCategoryLineChartElement ? dayCategoryLineChartElement.getContext('2d') : null;
+  const ctxProductCategoryLine = productCategoryLineChartElement ? productCategoryLineChartElement.getContext('2d') : null;
+  const ctxProductBar = productBarChartElement ? productBarChartElement.getContext('2d') : null;
+
 
   const storeSelect = document.getElementById('storeSelect');
   const filterButton = document.getElementById('filterButton');
   const metricSelect = document.getElementById('metricSelect');
+  const productSelect = document.getElementById('productSelect');
   const totalRevenueElement = document.getElementById('totalRevenue');
   const totalTransactionsElement = document.getElementById('totalTransactions');
+  const placeholderText = document.getElementById('placeholderText');
+
   let currentLineChart;
   let currentBarChart;
   let currentTimeCategoryLineChart;
   let currentDayCategoryLineChart;
+  let currentProductBarChart;
+  let currentProductCategoryLineChart;
+  
 
-  // Helper function to calculate total by store and month
   function calculateTotalByStoreAndMonth(data, metric) {
     const stores = {
       "Astoria": Array(6).fill(0),
@@ -37,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return stores;
   }
 
-  // Helper function to calculate total transactions and revenue
   function calculateTotals(data) {
     let totalRevenue = 0;
     let totalTransactions = 0;
@@ -50,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return { totalRevenue, totalTransactions };
   }
 
-  // Helper function to calculate category totals by store
   function calculateCategoryTotalsByStore(data, metric) {
     const categoryTotals = {};
 
@@ -69,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return categoryTotals;
   }
 
-  // Helper function to calculate time category totals by store
   function calculateTimeCategoryTotalsByStore(data, metric) {
     const timeCategories = ["Pagi", "Siang", "Sore", "Malam"];
     const stores = {
@@ -91,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return stores;
   }
 
-  // Helper function to calculate day category totals by store
   function calculateDayCategoryTotalsByStore(data, metric) {
     const dayCategories = ["Weekday", "Weekend"];
     const stores = {
@@ -113,214 +124,297 @@ document.addEventListener('DOMContentLoaded', () => {
     return stores;
   }
 
-  // Function to render line chart
-function renderLineChart(data, metric) {
-  const stores = calculateTotalByStoreAndMonth(data, metric);
-  const months = ['January', 'February', 'March', 'April', 'May', 'June'];
+  function calculateProductDetailsByStoreAndType(data, product) {
+    const productDetails = {};
 
-  if (currentLineChart) {
-    currentLineChart.destroy();
-  }
+    data.forEach(item => {
+      if (item.product_category === product) {
+        const store = item.store_location;
+        const productType = item.product_type;
+        const value = parseFloat(item.sales_revenue);
 
-  currentLineChart = new Chart(ctxLine, {
-    type: 'line',
-    data: {
-      labels: months,
-      datasets: Object.keys(stores).map(store => ({
-        label: store,
-        data: stores[store],
-        borderColor: getRandomColor(),
-        fill: false
-      }))
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
-            }
-          }
+        if (!productDetails[productType]) {
+          productDetails[productType] = { "Astoria": 0, "Hell's Kitchen": 0, "Lower Manhattan": 0 };
         }
+
+        productDetails[productType][store] += value;
       }
-    }
-  });
-}
+    });
 
-
-  // Function to render stacked bar chart
-function renderStackedBarChart(data, metric) {
-  const categories = calculateCategoryTotalsByStore(data, metric);
-  const labels = Object.keys(categories);
-  const stores = ["Astoria", "Hell's Kitchen", "Lower Manhattan"];
-
-  if (currentBarChart) {
-    currentBarChart.destroy();
+    return productDetails;
   }
 
-  currentBarChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: stores.map(store => ({
-        label: store,
-        data: labels.map(label => categories[label][store]),
-        backgroundColor: getRandomColor()
-      }))
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { stacked: true },
-        y: { 
-          stacked: true,
-          ticks: {
-            callback: function(value) {
-              return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
-            }
-          }
-        }
-      }
+  function renderLineChart(data, metric) {
+    const stores = calculateTotalByStoreAndMonth(data, metric);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June'];
+
+    if (currentLineChart) {
+      currentLineChart.destroy();
     }
-  });
-}
 
-
-  // Function to render time category line chart
-function renderTimeCategoryLineChart(data, metric) {
-  const stores = calculateTimeCategoryTotalsByStore(data, metric);
-  const timeCategories = ["Pagi", "Siang", "Sore", "Malam"];
-
-  if (currentTimeCategoryLineChart) {
-    currentTimeCategoryLineChart.destroy();
-  }
-
-  currentTimeCategoryLineChart = new Chart(ctxTimeCategoryLine, {
-    type: 'line',
-    data: {
-      labels: timeCategories,
-      datasets: Object.keys(stores).map(store => ({
-        label: store,
-        data: stores[store],
-        borderColor: getRandomColor(),
-        fill: false
-      }))
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
-            }
-          }
-        }
-      }
-    }
-  });
-}
-
-  // Function to render day category line chart
-function renderDayCategoryLineChart(data, metric) {
-  const dayCategories = ["Weekday", "Weekend"];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June'];
-
-  // Prepare data for weekday and weekends
-  const weekdayData = Array(6).fill(0);
-  const weekendData = Array(6).fill(0);
-
-  data.forEach(item => {
-    const transactionDate = new Date(item.transaction_date);
-    const month = transactionDate.getMonth();
-    const dayCategory = item.day_category === "Weekday" ? 0 : 1;
-    const value = metric === 'total_revenue' ? parseFloat(item.sales_revenue) : parseInt(item.transaction_qty);
-
-    if (dayCategory === 0) {
-      weekdayData[month] += value;
-    } else {
-      weekendData[month] += value;
-    }
-  });
-
-  if (currentDayCategoryLineChart) {
-    currentDayCategoryLineChart.destroy();
-  }
-
-  currentDayCategoryLineChart = new Chart(ctxDayCategoryLine, {
-    type: 'line',
-    data: {
-      labels: months,
-      datasets: [
-        {
-          label: 'Weekday',
-          data: weekdayData,
+    currentLineChart = new Chart(ctxLine, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: Object.keys(stores).map(store => ({
+          label: store,
+          data: stores[store],
           borderColor: getRandomColor(),
           fill: false
-        },
-        {
-          label: 'Weekend',
-          data: weekendData,
-          borderColor: getRandomColor(),
-          fill: false
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+              }
             }
           }
         }
       }
-    }
-  });
-}
+    });
+  }
 
-  // Function to filter data based on selected criteria
-  function filterData() {
+  function renderStackedBarChart(data, metric) {
+    const categories = calculateCategoryTotalsByStore(data, metric);
+    const labels = Object.keys(categories);
+    const stores = ["Astoria", "Hell's Kitchen", "Lower Manhattan"];
+
+    if (currentBarChart) {
+      currentBarChart.destroy();
+    }
+
+    currentBarChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: stores.map(store => ({
+          label: store,
+          data: labels.map(label => categories[label][store]),
+          backgroundColor: getRandomColor()
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { stacked: true },
+          y: { 
+            stacked: true,
+            ticks: {
+              callback: function(value) {
+                return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderTimeCategoryLineChart(data, metric) {
+    const stores = calculateTimeCategoryTotalsByStore(data, metric);
+    const timeCategories = ["Pagi", "Siang", "Sore", "Malam"];
+
+    if (currentTimeCategoryLineChart) {
+      currentTimeCategoryLineChart.destroy();
+    }
+
+    currentTimeCategoryLineChart = new Chart(ctxTimeCategoryLine, {
+      type: 'line',
+      data: {
+        labels: timeCategories,
+        datasets: Object.keys(stores).map(store => ({
+          label: store,
+          data: stores[store],
+          borderColor: getRandomColor(),
+          fill: false
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderDayCategoryLineChart(data, metric) {
+    const stores = calculateDayCategoryTotalsByStore(data, metric);
+    const dayCategories = ["Weekday", "Weekend"];
+
+    if (currentDayCategoryLineChart) {
+      currentDayCategoryLineChart.destroy();
+    }
+
+    currentDayCategoryLineChart = new Chart(ctxDayCategoryLine, {
+      type: 'line',
+      data: {
+        labels: dayCategories,
+        datasets: Object.keys(stores).map(store => ({
+          label: store,
+          data: stores[store],
+          borderColor: getRandomColor(),
+          fill: false
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderProductBarChart(data, product) {
+    const productDetails = calculateProductDetailsByStoreAndType(data, product);
+    const productTypes = Object.keys(productDetails);
+    const stores = ["Astoria", "Hell's Kitchen", "Lower Manhattan"];
+
+    if (currentProductBarChart) {
+      currentProductBarChart.destroy();
+    }
+
+    currentProductBarChart = new Chart(ctxProductBar, {
+      type: 'bar',
+      data: {
+        labels: productTypes,
+        datasets: stores.map(store => ({
+          label: store,
+          data: productTypes.map(type => productDetails[type][store]),
+          backgroundColor: getRandomColor()
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderProductCategoryLineChart(data, metric) {
+    const categories = calculateCategoryTotalsByStore(data, metric);
+    const labels = Object.keys(categories);
+    const stores = ["Astoria", "Hell's Kitchen", "Lower Manhattan"];
+
+    if (currentProductCategoryLineChart) {
+      currentProductCategoryLineChart.destroy();
+    }
+
+    currentProductCategoryLineChart = new Chart(ctxProductCategoryLine, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: stores.map(store => ({
+          label: store,
+          data: labels.map(label => categories[label][store]),
+          borderColor: getRandomColor(),
+          fill: false
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return metric === 'total_revenue' ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : value;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  productSelect.addEventListener('change', () => {
     const selectedStore = storeSelect.value;
+    const selectedMetric = metricSelect.value;
+    const selectedProduct = productSelect.value;
     const startDate = new Date(document.getElementById('startDate').value);
     const endDate = new Date(document.getElementById('endDate').value);
-    const metric = metricSelect.value;
 
     const filteredData = data.filter(item => {
       const transactionDate = new Date(item.transaction_date);
       const storeMatch = selectedStore === 'All' || item.store_location === selectedStore;
       const dateMatch = transactionDate >= startDate && transactionDate <= endDate;
-      return storeMatch && dateMatch;
+      const productMatch = selectedProduct === 'all' || item.product_category === selectedProduct;
+      return storeMatch && dateMatch && productMatch;
     });
 
-    const totals = calculateTotals(filteredData);
-    const formattedTotalRevenue = totals.totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    totalRevenueElement.textContent = ` ${formattedTotalRevenue}`;
-    totalTransactionsElement.textContent = ` ${totals.totalTransactions}`;
+    if (selectedProduct === 'all') {
+      renderProductCategoryLineChart(filteredData, selectedMetric);
+    } else {
+      renderProductBarChart(filteredData, selectedProduct);
+    }
+  });
+  
 
-    renderLineChart(filteredData, metric);
-    renderStackedBarChart(filteredData, metric);
-    renderTimeCategoryLineChart(filteredData, metric);
-    renderDayCategoryLineChart(filteredData, metric);
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
-  filterButton.addEventListener('click', filterData);
+  filterButton.addEventListener('click', () => {
+    const selectedStore = storeSelect.value;
+    const selectedMetric = metricSelect.value;
+    const selectedProduct = productSelect.value;
 
-  filterData(); // Initial render with full data
+    // Data filtering logic
+    const filteredData = data.filter(item => {
+      return (selectedStore === 'All' || item.store_location === selectedStore);
+    });
+
+    // Update total revenue and transactions
+    const totals = calculateTotals(filteredData);
+    totalRevenueElement.textContent = totals.totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    totalTransactionsElement.textContent = totals.totalTransactions;
+
+    // Render charts
+    renderLineChart(filteredData, selectedMetric);
+    renderStackedBarChart(filteredData, selectedMetric);
+    renderTimeCategoryLineChart(filteredData, selectedMetric);
+    renderDayCategoryLineChart(filteredData, selectedMetric);
+    renderProductCategoryLineChart(filteredData, selectedMetric);
+    renderProductBarChart(filteredData, selectedProduct);
+  });
+
+  // Initial render
+  filterButton.click();
 });
 
-// Function to generate random color
-function getRandomColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+
+
