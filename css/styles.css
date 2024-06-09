@@ -355,7 +355,7 @@ footer a {
   white-space: nowrap;
   position: relative;
   border: 2px solid #fff; /* Add border */
-  background-color: #fff; /* Add background color */
+  background-color: #fff;; /* Add background color */
   padding: 20px; /* Add padding */
   border-radius: 10px; /* Add border radius */
 }
