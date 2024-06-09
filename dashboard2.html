@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- Montserrat Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- <script src="js/dashboard.js"></script> -->
+  <script src="js/script.js" type="module"></script>
+</head>
+
+<body>
+  <div class="grid-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="menu-icon" onclick="openSidebar()">
+        <span class="material-icons-outlined">menu</span>
+      </div>
+      <div class="header-left">
+      </div>
+      <div class="header-right">
+        <span class="material-icons-outlined">account_circle</span>
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-title">
+        <div class="sidebar-brand">
+          <span class="material-icons-outlined">coffee_beans</span> Héptadecafé
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+
+      <ul class="sidebar-list">
+        <li class="sidebar-list-item">
+          <a href="#" target="_blank">
+            <span class="material-icons-outlined" sty>dashboard</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="index.html">
+            <span class="material-icons-outlined">home</span> Home
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+    <script>
+      let sidebarOpen = false;
+      const sidebar = document.getElementById('sidebar');
+
+      function openSidebar() {
+        if (!sidebarOpen) {
+          sidebar.classList.add('sidebar-responsive');
+          sidebarOpen = true;
+        }
+      }
+
+      function closeSidebar() {
+        if (sidebarOpen) {
+          sidebar.classList.remove('sidebar-responsive');
+          sidebarOpen = false;
+        }
+      }
+
+      // Attach openSidebar and closeSidebar functions to the appropriate elements
+      const closeButton = document.querySelector('.material-icons-outlined[onclick="closeSidebar()"]');
+      if (closeButton) {
+        closeButton.addEventListener('click', closeSidebar);
+      }
+    </script>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+      <div class="summary-boxes">
+        <div class="summary-box" id="totalRevenueBox">
+          <h3>Total Revenue</h3>
+          <p id="totalRevenue">0</p>
+        </div>
+        <div class="summary-box" id="totalTransactionBox">
+          <h3>Total Transactions</h3>
+          <p id="totalTransactions">0</p>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filters-content">
+          <div class="grid-item">
+            <label for="storeSelect">Select Store:</label>
+            <select id="storeSelect">
+              <option value="All">All</option>
+              <option value="Astoria">Astoria</option>
+              <option value="Hell's Kitchen">Hell's Kitchen</option>
+              <option value="Lower Manhattan">Lower Manhattan</option>
+            </select>
+          </div>
+          <div class="grid-item">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" value="2024-01-01">
+          </div>
+          <div class="grid-item">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" value="2024-06-01">
+          </div>
+          <div class="grid-item">
+            <label for="metricSelect">Select Metric:</label>
+            <select id="metricSelect">
+              <option value="total_revenue">Total Revenue</option>
+              <option value="total_transactions">Total Transactions</option>
+            </select>
+          </div>
+          <div class="button-container">
+            <button id="filterButton">Filter</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-box">
+          <h2>Total Revenue by Time Category</h2>
+          <canvas id="timeCategoryLineChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h2>Total Revenue by Day Category</h2>
+          <canvas id="dayCategoryLineChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-box">
+          <h2>Total Revenue by Store and Month</h2>
+          <canvas id="lineChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h2>Total Revenue by Product and Store</h2>
+          <canvas id="stackedBarChart"></canvas>
+        </div>
+      </div>
+
+      <label for="productSelect">Product:</label>
+      <select id="productSelect">
+        <option value="all">All</option>
+        <option value="Coffee">Coffee</option>
+        <option value="Tea">Tea</option>
+        <option value="Bakery">Bakery</option>
+        <option value="Drinking Chocolate">Drinking Chocolate</option>
+        <option value="Loose Tea">Loose Tea</option>
+        <option value="Coffee beans">Coffee beans</option>
+        <option value="Branded">Branded</option>
+        <option value="Packaged Chocolate">Packaged Chocolate</option>
+        <option value="Flavours">Flavours</option>
+      </select>
+
+      <div class="chart-container">
+        <div class="chart-box">
+          <h2 id="productChartTitle">Product Category per Month</h2>
+          <canvas id="productCategoryLineChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h2 id="detailChartTitle">Product Details per Store</h2>
+          <canvas id="productBarChart"></canvas>
+          <p id="placeholderText" style="text-align: center; color: grey">
+            Choose Product to See this Chart
+          </p>
+        </div>
+      </div>
+    </main>
+    <!-- End Main -->
+
+  </div>
+
+</body>
+
+</html>
